@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SystemEmailTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:noNamespaceSchemaLocation="SystemEmailTemplate.xsd">
+    <Template>
+        <Name>New_User_Request</Name>
+        <Subject>[accountDefinition:/hostDisplayName] User Request</Subject>
+        <Body>
+            <![CDATA[
+                The following user account request has been submitted to you through [accountDefinition:/hostDisplayName]:<br />
+                <br />
+                Name: [userDefinition:/lastFirstName] <br />
+                Email: [userDefinition:/email] <br />
+                Phone: [userDefinition:/voicePhone] <br />
+                Company: [accountDefinition:/companyName] <br />
+                Title: [userDefinition:/title] <br />
+                <br />
+                To take action on this registration request (approve or deny) please follow this  link:<a href="[linkDefinition:/accountChangeAccountInfo]">[linkDefinition:/accountChangeAccountInfo]</a><br />
+                <br />
+                Please note that the user will not be able to access [accountDefinition:/hostDisplayName] until you approve the registration request and set up their permissions.
+            ]]>
+        </Body>
+        <From></From>
+        <Cc></Cc>
+        <Bcc></Bcc>
+        <NoEmail>false</NoEmail>
+        <IsApproval>false</IsApproval>
+        <Unzip>false</Unzip>
+        <AttachGeneratedDocument>false</AttachGeneratedDocument>
+        <Attachments></Attachments>
+    </Template>
+
+    <LocalizedValues>
+        <Locale>
+            <![CDATA[
+                Fran&ccedil;ais - France
+            ]]>
+        </Locale>
+        <Subject>[accountDefinition:/hostDisplayName] Demande D'Utilisateur</Subject>
+        <Body>
+            <![CDATA[
+                "La demande suivante de compte d'utilisateur a été soumise à vous à travers [accountDefinition:/hostDisplayName]:<br />
+                <br />
+                Nom: [userDefinition:/lastFirstName]  <br />
+                Email:  [userDefinition:/email]<br />
+                Téléphone:  [userDefinition:/voicePhone]<br />
+                Compagnie: [accountDefinition:/companyName]  <br />
+                Titre: [userDefinition:/title] <br />
+                <br />
+                Pour agir sur cette demande d'enregistrement (approuvez ou niez) suivez svp ce lien:<a href=""[linkDefinition:/accountChangeAccountInfo]"">[linkDefinition:/accountChangeAccountInfo]</a>.  <br />
+                <br />
+                Veuillez noter que l'utilisateur ne pourra pas accéder [accountDefinition:/hostDisplayName] jusqu'à ce que vous approuviez la demande d'enregistrement et installiez leurs permissions."
+            ]]>
+        </Body>
+    </LocalizedValues>
+</SystemEmailTemplate>

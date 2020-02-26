@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xsd:element name="SystemEmailTemplate">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Template" type="TemplateType"/>
+                <xsd:element name="LocalizedValues" type="LocalizedValuesType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="TemplateType">
+        <xsd:sequence>
+            <xsd:element name="Name" type="xsd:string"/>
+            <xsd:element name="Subject" type="xsd:string"/>
+            <xsd:element name="Body" type="xsd:string"/>
+            <xsd:element name="From" type="xsd:string"/>
+            <xsd:element name="Cc" type="xsd:string"/>
+            <xsd:element name="Bcc" type="xsd:string"/>
+            <xsd:element name="NoEmail" type="xsd:boolean"/>
+            <xsd:element name="IsApproval" type="xsd:boolean"/>
+            <xsd:element name="Unzip" type="xsd:boolean"/>
+            <xsd:element name="AttachGeneratedDocument" type="xsd:boolean"/>
+            <xsd:element name="Attachments" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="LocalizedValuesType">
+        <xsd:sequence>
+            <xsd:element name="Locale" type="xsd:string"/>
+            <xsd:element name="Subject" type="xsd:string"/>
+            <xsd:element name="Body" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>
