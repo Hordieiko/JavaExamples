@@ -9,6 +9,6 @@ public class Main {
         String first5 = "first";
         //asdas
         String first3 = "first";
-        System.out.println("m2");
+        System.out.println("f2");
     }
 }
