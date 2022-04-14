@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GitHubMain {
@@ -21,9 +22,54 @@ public class GitHubMain {
     private static final String CLM_26867_6_10_4_DocuSign_v2_1_OAuth_2_0 = "2c6b6f2bb1e6c6120b9ff216591237a64d057000";
     private static final String CLM_26868_6_9_5_DocuSign_v2_1_OAuth_2_0 = "0322c4e77850d4f8cd28d22daf69451b8f504690";
     private static final String CLM_26872_6_9_0_DocuSign_v2_1_OAuth_2_0 = "de4ae3fcdbfb57f464f32fa6eb790cba3aadaef8";
-    private static final String CLM_26869_6_8_1_DocuSign_v2_1_OAuth_2_0 = "9c6954a01aa658f43ea721df0f9f3c1fe454462a";
+    private static final String CLM_26869_6_8_1_DocuSign_v2_1_OAuth_2_0 = "9ea0042e71969f2f912930ffc480d3192b03fbe9";
+    private static final String CLM_26870_6_7_4_DocuSign_v2_1_OAuth_2_0 = "b70f0a251290fa158641b8f29432e2238575446d";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        String owner = "Selectica";
+        String repo = "CLM";
+
+        logger.info("Repository: {}/{}", owner, repo);
+
+        GitHubWrapper gitHub = new GitHubWrapper(getDefaultGitHub(), owner);
+        GHRepository repository = gitHub.getRepository(repo);
+        List<String> clm6104ChangedFiles = getFileNamesByCommit(repository, CLM_26867_6_10_4_DocuSign_v2_1_OAuth_2_0);
+        List<String> clm695ChangedFiles = getFileNamesByCommit(repository, CLM_26868_6_9_5_DocuSign_v2_1_OAuth_2_0);
+        List<String> clm690ChangedFiles = getFileNamesByCommit(repository, CLM_26872_6_9_0_DocuSign_v2_1_OAuth_2_0);
+        List<String> clm681ChangedFiles = getFileNamesByCommit(repository, CLM_26869_6_8_1_DocuSign_v2_1_OAuth_2_0);
+        List<String> clm674ChangedFiles = getFileNamesByCommit(repository, CLM_26870_6_7_4_DocuSign_v2_1_OAuth_2_0);
+
+        List<String> clm6104NotInClm695 = getNotInList(clm6104ChangedFiles, clm695ChangedFiles);
+        List<String> clm695NotInClm690 = getNotInList(clm695ChangedFiles, clm690ChangedFiles);
+        List<String> clm690NotInClm681 = getNotInList(clm690ChangedFiles, clm681ChangedFiles);
+        List<String> clm681NotInClm674 = getNotInList(clm681ChangedFiles, clm674ChangedFiles);
+
+        logger.info("\n### Changes CLM 6.10.4 that not in CLM 6.9.5:\n{}", listToString(clm6104NotInClm695));
+        logger.info("\n### Changes CLM 6.9.5 that not in CLM 6.9.0:\n{}", listToString(clm695NotInClm690));
+        logger.info("\n### Changes CLM 6.9.0 that not in CLM 6.8.1:\n{}", listToString(clm690NotInClm681));
+        logger.info("\n### Changes CLM 6.8.1 that not in CLM 6.7.4:\n{}", listToString(clm681NotInClm674));
+    }
+
+    private static String listToString(List<String> list) {
+        return listToString(list, "\n");
+    }
+    private static String listToString(List<String> list, CharSequence delimiter) {
+        return String.join(delimiter, list.toArray(new String[0]));
+    }
+
+    private static List<String> getFileNamesByCommit(GHRepository repository, String commitSHA) throws IOException {
+        return getFilesByCommit(repository, commitSHA).stream().map(GHCommit.File::getFileName).collect(Collectors.toList());
+    }
+
+    private static List<String> getNotInList(List<String> source, List<String> target) {
+        return source.stream().filter(containsIn(target).negate()).collect(Collectors.toList());
+    }
+
+    private static Predicate<String> containsIn(List<String> list) {
+        return list::contains;
+    }
+
+    public static void main1(String[] args) {
         try {
             String owner = "Selectica";
             String repo = "CLM";
