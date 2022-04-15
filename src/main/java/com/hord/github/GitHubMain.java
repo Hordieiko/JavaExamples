@@ -2,7 +2,10 @@ package com.hord.github;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.kohsuke.github.*;
+import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +28,13 @@ public class GitHubMain {
     private static final String CLM_26869_6_8_1_DocuSign_v2_1_OAuth_2_0 = "9ea0042e71969f2f912930ffc480d3192b03fbe9";
     private static final String CLM_26870_6_7_4_DocuSign_v2_1_OAuth_2_0 = "b70f0a251290fa158641b8f29432e2238575446d";
 
-    public static void main(String[] args) throws IOException {
+    private static final String CLM_26867_6_10_4_BRANCH = "CLM-26867-6.10.4-DocuSign_v2.1_OAuth_2.0";
+    private static final String CLM_26868_6_9_5_BRANCH = "CLM-26868-6.9.5-DocuSign_v2.1_OAuth_2.0";
+    private static final String CLM_26872_6_9_0_BRANCH = "CLM-26872-6.9.0-DocuSign_v2.1_OAuth_2.0";
+    private static final String CLM_26869_6_8_1_BRANCH = "CLM-26869-6.8.1-DocuSign_v2.1_OAuth_2.0";
+    private static final String CLM_26870_6_7_4_BRANCH = "CLM-26870-6.7.4-DocuSign_v2.1_OAuth_2.0";
+
+    public static void main2(String[] args) throws IOException {
         String owner = "Selectica";
         String repo = "CLM";
 
@@ -50,41 +59,21 @@ public class GitHubMain {
         logger.info("\n### Changes CLM 6.8.1 that not in CLM 6.7.4:\n{}", listToString(clm681NotInClm674));
     }
 
-    private static String listToString(List<String> list) {
-        return listToString(list, "\n");
-    }
-    private static String listToString(List<String> list, CharSequence delimiter) {
-        return String.join(delimiter, list.toArray(new String[0]));
-    }
-
-    private static List<String> getFileNamesByCommit(GHRepository repository, String commitSHA) throws IOException {
-        return getFilesByCommit(repository, commitSHA).stream().map(GHCommit.File::getFileName).collect(Collectors.toList());
-    }
-
-    private static List<String> getNotInList(List<String> source, List<String> target) {
-        return source.stream().filter(containsIn(target).negate()).collect(Collectors.toList());
-    }
-
-    private static Predicate<String> containsIn(List<String> list) {
-        return list::contains;
-    }
-
-    public static void main1(String[] args) {
+    public static void main(String[] args) {
         try {
             String owner = "Selectica";
             String repo = "CLM";
-            String commitSHA = CLM_26869_6_8_1_DocuSign_v2_1_OAuth_2_0;
+            String branch = CLM_26870_6_7_4_BRANCH;
+
+            GitHubWrapper gitHub = new GitHubWrapper(getDefaultGitHub(), owner);
+            GHRepository repository = gitHub.getRepository(repo);
+            String commitSHA = repository.getBranch(branch).getSHA1();
 
             logger.info("Repository: {}/{}", owner, repo);
+            logger.info("Branch: {}", branch);
             logger.info("Commit SHA: {}", commitSHA);
 
             List<String> fileNameList = getFileNameList("fileNameList");
-            GitHubWrapper gitHub = new GitHubWrapper(getDefaultGitHub(), owner);
-            GHRepository repository = gitHub.getRepository(repo);
-
-            List<GHBranch> branches = repository.getCommit(commitSHA).listBranchesWhereHead().toList();
-            if (branches.size() == 1)
-                logger.info("Branch: {}", branches.get(0).getName());
 
             List<GHCommit.File> files = getAddedOrListedFilesByCommit(repository, commitSHA, fileNameList);
             logger.info("{} files ready for copy", files.size());
@@ -209,5 +198,25 @@ public class GitHubMain {
 
     private static GitHub getDefaultGitHub() throws IOException {
         return GitHubBuilder.fromPropertyFile("./github.properties").build();
+    }
+
+    private static String listToString(List<String> list) {
+        return listToString(list, "\n");
+    }
+
+    private static String listToString(List<String> list, CharSequence delimiter) {
+        return String.join(delimiter, list.toArray(new String[0]));
+    }
+
+    private static List<String> getFileNamesByCommit(GHRepository repository, String commitSHA) throws IOException {
+        return getFilesByCommit(repository, commitSHA).stream().map(GHCommit.File::getFileName).collect(Collectors.toList());
+    }
+
+    private static List<String> getNotInList(List<String> source, List<String> target) {
+        return source.stream().filter(containsIn(target).negate()).collect(Collectors.toList());
+    }
+
+    private static Predicate<String> containsIn(List<String> list) {
+        return list::contains;
     }
 }
