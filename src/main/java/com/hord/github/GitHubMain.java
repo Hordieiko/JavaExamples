@@ -22,17 +22,20 @@ public class GitHubMain {
 
     private static final Logger logger = LogManager.getLogger(GitHubMain.class);
 
+    private static final String CLM_26863_6_11_GA_DocuSign_v2_1_OAuth_2_0 = "1135c20f5491ed407f9f2222c05ad89b156add17";
     private static final String CLM_26867_6_10_4_DocuSign_v2_1_OAuth_2_0 = "2c6b6f2bb1e6c6120b9ff216591237a64d057000";
     private static final String CLM_26868_6_9_5_DocuSign_v2_1_OAuth_2_0 = "0322c4e77850d4f8cd28d22daf69451b8f504690";
     private static final String CLM_26872_6_9_0_DocuSign_v2_1_OAuth_2_0 = "de4ae3fcdbfb57f464f32fa6eb790cba3aadaef8";
     private static final String CLM_26869_6_8_1_DocuSign_v2_1_OAuth_2_0 = "9ea0042e71969f2f912930ffc480d3192b03fbe9";
     private static final String CLM_26870_6_7_4_DocuSign_v2_1_OAuth_2_0 = "b70f0a251290fa158641b8f29432e2238575446d";
 
+    private static final String CLM_26863_6_11_GA_BRANCH = "CLM-26863-6.11.GA_DocuSign_OAuth_2.0";
     private static final String CLM_26867_6_10_4_BRANCH = "CLM-26867-6.10.4-DocuSign_v2.1_OAuth_2.0";
     private static final String CLM_26868_6_9_5_BRANCH = "CLM-26868-6.9.5-DocuSign_v2.1_OAuth_2.0";
     private static final String CLM_26872_6_9_0_BRANCH = "CLM-26872-6.9.0-DocuSign_v2.1_OAuth_2.0";
     private static final String CLM_26869_6_8_1_BRANCH = "CLM-26869-6.8.1-DocuSign_v2.1_OAuth_2.0";
     private static final String CLM_26870_6_7_4_BRANCH = "CLM-26870-6.7.4-DocuSign_v2.1_OAuth_2.0";
+    private static final String CLM_26871_6_7_3_BRANCH = "CLM-26871-6.7.3-DocuSign_v2.1_OAuth_2.0";
 
     public static void main2(String[] args) throws IOException {
         String owner = "Selectica";
@@ -63,14 +66,15 @@ public class GitHubMain {
         try {
             String owner = "Selectica";
             String repo = "CLM";
-            String branch = CLM_26870_6_7_4_BRANCH;
+//            String branch = CLM_26863_6_11_GA_BRANCH;
 
             GitHubWrapper gitHub = new GitHubWrapper(getDefaultGitHub(), owner);
             GHRepository repository = gitHub.getRepository(repo);
-            String commitSHA = repository.getBranch(branch).getSHA1();
+            String commitSHA = CLM_26863_6_11_GA_DocuSign_v2_1_OAuth_2_0;
+//            String commitSHA = repository.getBranch(branch).getSHA1();
 
             logger.info("Repository: {}/{}", owner, repo);
-            logger.info("Branch: {}", branch);
+//            logger.info("Branch: {}", branch);
             logger.info("Commit SHA: {}", commitSHA);
 
             List<String> fileNameList = getFileNameList("fileNameList");
