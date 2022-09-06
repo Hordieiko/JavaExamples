@@ -1,13 +1,11 @@
 package com.hord;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.SneakyThrows;
 
 public class Main {
 
-    private static final Logger logger = LogManager.getLogger(Main.class);
-
+    @SneakyThrows
     public static void main(String[] args) {
-        String str = "temp_feature";
+        String str = "1 2 3";
     }
 }
